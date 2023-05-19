@@ -1,35 +1,20 @@
 name: to-do application CICD
 
 on:
-  push:
-    branches:
-      - main
-
+  workflow_dispatch:
+    inputs:
+      ec2-name:
+        description: EC2 name
+        required: true
+        default: 'rrg-server'
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: '${{ secrets.AWS_USER_KEY }}'
-          aws-secret-access-key: '${{ secrets.AWS_USER_SECRET_KEY }}'
-          aws-region: us-east-1
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_wrapper: false
-      - name: Terraform Apply
-        id:   apply
-        env:
-          TF_VAR_ec2_name:  "${{ github.event.inputs.ec2-name }}"
-        run: |
-          cd tf/
-          terraform init
-          terraform validate
-          terraform apply -auto-approve
+
       - name: Node.js Setup
         uses: actions/setup-node@v2.5.2
         with:
@@ -66,6 +51,25 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: '${{ secrets.AWS_USER_KEY }}'
+          aws-secret-access-key: '${{ secrets.AWS_USER_SECRET_KEY }}'
+          aws-region: us-east-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Terraform Apply
+        id:   apply
+        env:
+          TF_VAR_ec2_name:  "${{ github.event.inputs.ec2-name }}"
+        run: |
+          cd tf/
+          terraform init
+          terraform validate
+          terraform apply -auto-approve
 
       - name: Install dependencies
         run: npm install
