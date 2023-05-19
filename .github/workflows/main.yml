@@ -1,50 +1,58 @@
 name: to-do application CICD
+
 on:
-        push:
-            branches: main
-    
+  push:
+    branches:
+      - main
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Repo Checkout
-            uses: actions/checkout@v2
-          - name: Node.js Setup
-            uses: actions/setup-node@v2.5.2
-            with:
-              node-version: 14
-          - name: Install dependencies
-            run: npm install
-          - name: Build
-            run: npm build
-          - name: Archive artifacts
-            uses: actions/upload-artifact@v2
-            with:
-              name: my-artifacts
-              path: dist/todo/
-    deploy:
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
 
-          - name: Download artifacts
-            uses: actions/download-artifact@v2
-            with:
-              name: my-artifacts
-              path: dist/todo/
+      - name: Node.js Setup
+        uses: actions/setup-node@v2.5.2
+        with:
+          node-version: 14
 
-          - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-              node-version: 14
+      - name: Install dependencies
+        run: npm install
 
-          - name: Install dependencies
-            run: npm ci
+      - name: Build
+        run: npm build
 
-#           - name: Deploy to production
-#             run: |
-#               # Example: Copy artifacts to a remote server
-#               scp -r dist/todo/* user@deploy-server:/path/to/destination
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifacts
+          path: dist/todo/
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifacts
+          path: dist/todo/
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Add your deployment steps here
+      # Uncomment and modify the following step to deploy to a remote server
+      # - name: Deploy to production
+      #   run: |
+      #     # Example: Copy artifacts to a remote server
+      #     scp -r dist/todo/* user@deploy-server:/path/to/destination
