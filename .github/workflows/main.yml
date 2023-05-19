@@ -50,7 +50,7 @@ jobs:
           node-version: 14
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       # Add your deployment steps here
       # Uncomment and modify the following step to deploy to a remote server
