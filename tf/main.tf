@@ -44,7 +44,7 @@ resource "aws_instance" "LAMP_server" {
   instance_type = var.instance_type
   subnet_id = var.subnet_id
   key_name = var.key_name
-  vpc_security_group_ids = [sg-06347fcf925ff7c0d]
+  vpc_security_group_ids = ["sg-06347fcf925ff7c0d"]
   root_block_device {
     volume_size = 8
     volume_type = "gp3"
