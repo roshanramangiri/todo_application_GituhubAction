@@ -70,6 +70,7 @@ jobs:
           terraform init
           terraform validate
           terraform apply -auto-approve
+          aws s3 cp terraform.tfstate s3://roshanramangiri/
      
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -79,6 +80,8 @@ jobs:
 
       - name: Retrieve EC2 instance IP address
         run: |
+          aws s2 cp s3://roshanramangiri/terraform.tfstate
+          
           ip_address=$(jq -r '.resources[].instances[].attributes.public_ip' terraform.tfstate)
           echo "EC2 instance IP address: $ip_address"
               scp -i '{{secrets.rosh_auth_key}}' -r dist/todo ubuntu@'{{ip_address}}':/var/www/html/
