@@ -70,11 +70,18 @@ jobs:
           terraform init
           terraform validate
           terraform apply -auto-approve
-      - name: Copy files to EC2 instance
+     
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Download Terraform state file
         run: |
-              public_ip=$(terraform output -raw aws_instance.LAMP_server.public_ip)
-              echo "::set-output name=public_ip::$public_ip"
-              scp -i '{{secrets.rosh_auth_key}}' -r dist/todo ubuntu@'{{public_ip}}':/var/www/html/
+              cp /tf/terraform.tfstate .
+
+      - name: Retrieve EC2 instance IP address
+        run: |
+          ip_address=$(jq -r '.resources[].instances[].attributes.public_ip' terraform.tfstate)
+          echo "EC2 instance IP address: $ip_address"
+              scp -i '{{secrets.rosh_auth_key}}' -r dist/todo ubuntu@'{{ip_address}}':/var/www/html/
 
       - name: Install dependencies
         run: npm install
