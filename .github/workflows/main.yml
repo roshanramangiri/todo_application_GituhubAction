@@ -71,6 +71,9 @@ jobs:
           terraform validate
           terraform apply -auto-approve
           aws s3 cp terraform.tfstate s3://roshanramangiri/
+          echo "::set-output name=ec2_ip::$(terraform output -json ec2_ip)"
+          ip_address=${{ steps.capture_ip.outputs.ec2_ip }}
+          echo "EC2 instance IP address: $ip_address"
      
       - name: Checkout repository
         uses: actions/checkout@v2
