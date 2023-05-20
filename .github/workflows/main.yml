@@ -89,8 +89,9 @@ jobs:
             USER_NAME: ubuntu
       
         run: |
+          echo "$HOSTNAME"
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -i private_key -r dist/todo ubuntu@$ip_address:/var/www/html/
+          scp -i private_key -r dist/todo ubuntu@"$HOSTNAME":/var/www/html/
       
       
       - name: executing remote ssh commands using password
