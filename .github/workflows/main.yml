@@ -82,12 +82,12 @@ jobs:
             aws s3 cp s3://roshanramangiri/terraform.tfstate .
             ip_address=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
             echo "EC2 instance IP address: $ip_address"
-      - name: Build & Deploy
         env:
             PRIVATE_KEY: ${{ secrets.ROSHAN_AUTH_KEY }}
             HOSTNAME: $ip_address
             USER_NAME: ubuntu
       
+      - name: Build & Deploy
         run: |
           echo "$HOSTNAME"
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
