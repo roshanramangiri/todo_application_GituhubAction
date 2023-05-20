@@ -82,7 +82,7 @@ jobs:
           aws s3 cp s3://roshanramangiri/terraform.tfstate .
           ip_address=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo "EC2 instance IP address: $ip_address"
-          scp -i '${{ secrets.ROSHAN_AUTH_KEY }}' -r dist/todo ubuntu@'{{ip_address}}':/var/www/html/
+          scp -i '${{ secrets.ROSHAN_AUTH_KEY }}' -r dist/todo ubuntu@'${{ip_address}}':/var/www/html/
 
       - name: Install dependencies
         run: npm install
