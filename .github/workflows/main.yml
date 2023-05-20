@@ -34,7 +34,7 @@ jobs:
           name: my-artifacts
           path: dist/todo/
 
-  deploy:
+  deploy-part-1:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -74,20 +74,19 @@ jobs:
           echo "::set-output name=ec2_ip::$(terraform output -json ec2_ip)"
           ip_address=${{ steps.capture_ip.outputs.ec2_ip }}
           echo "EC2 instance IP address: $ip_address"
-     
+  
+  deploy-part-2:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Download Terraform state file
-        run: |
-              cp /tf/terraform.tfstate .
-
       - name: Retrieve EC2 instance IP address
         run: |
-          aws s2 cp s3://roshanramangiri/terraform.tfstate
-          
-          ip_address=$(jq -r '.resources[].instances[].attributes.public_ip' terraform.tfstate)
+          aws s3 cp s3://roshanramangiri/terraform.tfstate .
+          ip_address=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo "EC2 instance IP address: $ip_address"
-              scp -i '{{secrets.rosh_auth_key}}' -r dist/todo ubuntu@'{{ip_address}}':/var/www/html/
+          scp -i '{{secrets.rosh_auth_key}}' -r dist/todo ubuntu@'{{ip_address}}':/var/www/html/
 
       - name: Install dependencies
         run: npm install
