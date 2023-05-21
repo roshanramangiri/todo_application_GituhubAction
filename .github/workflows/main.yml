@@ -90,7 +90,7 @@ jobs:
         run: |
           HOSTNAME=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo $HOSTNAME
-          echo "${{ secrets.ROSHAN-AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 private_key
+          echo "${{ secrets.ROSHAN-AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 roshan-auth-key.pem
           cat roshan-auth-key.pem
           ls -l
           scp -o StrictHostKeyChecking=no -i proshan-auth-key.pem -r dist/todo ubuntu@$HOSTNAME:/var/www/html/
