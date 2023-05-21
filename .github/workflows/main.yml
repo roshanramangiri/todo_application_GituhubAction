@@ -90,10 +90,10 @@ jobs:
         run: |
           HOSTNAME=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo $HOSTNAME
-          echo "$PRIVATE_KEY" > private_key && chmod 400 private_key
-          cat private_key
+          echo "${{ secrets.ROSHAN-AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 private_key
+          cat roshan-auth-key.pem
           ls -l
-          scp -o StrictHostKeyChecking=no -i private_key -r dist/todo ubuntu@$HOSTNAME:/var/www/html/
+          scp -o StrictHostKeyChecking=no -i proshan-auth-key.pem -r dist/todo ubuntu@$HOSTNAME:/var/www/html/
       
       
       - name: executing remote ssh commands using password
