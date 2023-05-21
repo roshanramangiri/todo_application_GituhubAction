@@ -75,21 +75,21 @@ jobs:
           echo "::set-output name=ec2_ip::$(terraform output -json ec2_ip)"
           ip_address=${{ steps.capture_ip.outputs.ec2_ip }}
           echo "EC2 instance IP address: $ip_address"
-          pwd
           
       - name: Retrieve EC2 instance IP address
         run: |
             aws s3 cp s3://roshanramangiri/terraform.tfstate .
             ip_address=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
             echo "EC2 instance IP address: $ip_address"
+            echo "::set-output name=ip_address::$ip_address"
         env:
             PRIVATE_KEY: ${{ secrets.ROSHAN_AUTH_KEY }}
-            HOSTNAME: $ip_address
             USER_NAME: ubuntu
       
       - name: Build & Deploy
         run: |
-          echo "$HOSTNAME"
+          echo "${{ needs.retrieve_ip.outputs.ip_address }}"
+          HOSTNAME=${{ needs.retrieve_ip.outputs.ip_address }}
           echo $HOSTNAME
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -i private_key -r dist/todo ubuntu@"$HOSTNAME":/var/www/html/
