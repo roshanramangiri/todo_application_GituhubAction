@@ -89,7 +89,7 @@ jobs:
       - name: Build & Deploy
         run: |
           echo "${{ needs.retrieve_ip.outputs.ip_address }}"
-          HOSTNAME=${{ needs.retrieve_ip.outputs.ip_address }}
+          HOSTNAME=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo $HOSTNAME
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -i private_key -r dist/todo ubuntu@"$HOSTNAME":/var/www/html/
