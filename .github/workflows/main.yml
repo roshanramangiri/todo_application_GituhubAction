@@ -93,7 +93,7 @@ jobs:
           echo "${{ secrets.ROSHAN-AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 roshan-auth-key.pem
           cat roshan-auth-key.pem
           ls -l
-          scp -o StrictHostKeyChecking=no -i proshan-auth-key.pem -r dist/todo ubuntu@$HOSTNAME:/var/www/html/
+          scp -o StrictHostKeyChecking=no -i roshan-auth-key.pem -r dist/todo ubuntu@$HOSTNAME:/var/www/html/
       
       
       - name: executing remote ssh commands using password
