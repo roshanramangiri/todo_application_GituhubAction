@@ -92,7 +92,9 @@ jobs:
           HOSTNAME=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo $HOSTNAME
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -i private_key -r dist/todo ubuntu@"$HOSTNAME":/var/www/html/
+          cat private_key
+          ls -l
+          scp -o StrictHostKeyChecking=no -i private_key -r dist/todo ubuntu@"$HOSTNAME":/var/www/html/
       
       
       - name: executing remote ssh commands using password
