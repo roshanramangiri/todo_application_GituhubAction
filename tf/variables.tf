@@ -1,6 +1,6 @@
 variable "name" {
   type = string
-  default = "LAMP-SERVER"
+  default = "rrg-server"
   description = "Name of the project."
 }
 
