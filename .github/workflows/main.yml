@@ -94,7 +94,7 @@ jobs:
           cat roshan-auth-key.pem
           ls -l
           sleep 60
-          scp -o StrictHostKeyChecking=no -i roshan-auth-key.pem -r dist/todo/* ubuntu@$HOSTNAME:/var/www/html
+          sudo scp -o StrictHostKeyChecking=no -i roshan-auth-key.pem -r dist/todo/* ubuntu@$HOSTNAME:/var/www/html
       
     
 
