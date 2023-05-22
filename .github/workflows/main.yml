@@ -34,7 +34,7 @@ jobs:
           name: my-artifacts
           path: dist/todo/
 
-  deploy-part-1:
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
