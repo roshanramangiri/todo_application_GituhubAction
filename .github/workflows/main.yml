@@ -90,23 +90,13 @@ jobs:
         run: |
           HOSTNAME=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo $HOSTNAME
-          echo "${{ secrets.ROSHAN-AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 roshan-auth-key.pem
+          echo "${{ secrets.ROSHAN_AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 roshan-auth-key.pem
           cat roshan-auth-key.pem
           ls -l
           sleep 60
           scp -o StrictHostKeyChecking=no -i roshan-auth-key.pem -r dist/todo ubuntu@$HOSTNAME:/var/www/html/
       
-      
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-            host: $ip_address
-            username: ubuntu
-            key: ${{ secrets.ROSHAN_AUTH_KEY }}
-            port: 22
-            script: whoami
-      - name: Install dependencies
-        run: npm install
+    
 
       # Add your deployment steps here
       # Uncomment and modify the following step to deploy to a remote server
