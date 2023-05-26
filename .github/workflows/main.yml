@@ -76,7 +76,7 @@ jobs:
           
       - name: Retrieve EC2 instance IP address
         run: |
-            aws s3 cp s3://roshanramangiri/terraform.tfstate .
+            aws s3 cp s3://roshanramangiri/tf/terraform.tfstate .
             ip_address=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
             echo "EC2 instance IP address: $ip_address"
             echo "{ip_address}={$ip_address}" >> $GITHUB_OUTPUT
