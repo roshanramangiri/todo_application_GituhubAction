@@ -54,3 +54,10 @@ resource "aws_instance" "LAMP_server" {
     var.tags, local.tags
   )
 }
+terraform {
+  backend "s3" {
+    bucket         = "roshanramangiri"
+    key            = "tf/terraform.tfstate"
+    region         = "us-east-1"
+  }
+}
