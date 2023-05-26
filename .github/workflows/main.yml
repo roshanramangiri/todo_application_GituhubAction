@@ -66,7 +66,6 @@ jobs:
         env:
           TF_VAR_ec2_name:  "${{ github.event.inputs.ec2-name }}"
         run: |
-          tree .
           cd tf/
           terraform init
           terraform validate
@@ -89,8 +88,6 @@ jobs:
         run: |
           HOSTNAME=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
           echo $HOSTNAME
-          echo "${{ secrets.ROSHAN_AUTH_KEY}}" > roshan-auth-key.pem && chmod 400 roshan-auth-key.pem
-          cat roshan-auth-key.pem
-          ls -l
+          echo "${{ secrets.ROSHAN_AUTH_KEY}}" > roshan_auth_key.pem && chmod 400 roshan_auth_key.pem
           sleep 60
           sudo scp -o StrictHostKeyChecking=no -i roshan-auth-key.pem -r dist/todo/* ubuntu@$HOSTNAME:/var/www/html
