@@ -90,4 +90,4 @@ jobs:
           echo $HOSTNAME
           echo "${{ secrets.ROSHAN_AUTH_KEY}}" > roshan_auth_key.pem && chmod 400 roshan_auth_key.pem
           sleep 60
-          sudo scp -o StrictHostKeyChecking=no -i roshan-auth-key.pem -r dist/todo/* ubuntu@$HOSTNAME:/var/www/html
+          sudo scp -o StrictHostKeyChecking=no -i roshan_auth_key.pem -r dist/todo/* ubuntu@$HOSTNAME:/var/www/html
