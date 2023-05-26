@@ -71,8 +71,7 @@ jobs:
           terraform init
           terraform validate
           terraform apply -auto-approve
-          aws s3 cp terraform.tfstate s3://roshanramangiri/
-          echo "::set-output name=ec2_ip::$(terraform output -json ec2_ip)"
+          echo "{ec2_ip}={$(terraform output -json ec2_ip)}" >> $GITHUB_OUTPUT
           ip_address=${{ steps.capture_ip.outputs.ec2_ip }}
           echo "EC2 instance IP address: $ip_address"
           
@@ -81,7 +80,7 @@ jobs:
             aws s3 cp s3://roshanramangiri/terraform.tfstate .
             ip_address=$(jq -r '.outputs.ec2_ip.value' terraform.tfstate)
             echo "EC2 instance IP address: $ip_address"
-            echo "::set-output name=ip_address::$ip_address"
+            echo "{ip_address}={$ip_address}" >> $GITHUB_OUTPUT
         env:
             PRIVATE_KEY: ${{ secrets.ROSHAN_AUTH_KEY }}
             USER_NAME: ubuntu
