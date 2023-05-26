@@ -26,7 +26,7 @@ variable "subnet_id" {
 
 variable "key_name" {
     type = string
-    default = "roshan-auth-key"
+    default = "roshan_auth_key"
     description = "Private key "
   
 }
